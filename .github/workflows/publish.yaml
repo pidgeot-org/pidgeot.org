@@ -21,10 +21,10 @@ jobs:
       - name: Build site
         uses: jakejarvis/hugo-build-action@master
         with:
-          args: -s site
+          args: -t terminal
 
       - name: Push gh-pages branch
         run: |
           git add -A
           git commit -m"rebuilding site from ${{ github.sha }}"
-          git push upstream `git subtree split --prefix=site/public --ignore-joins`:gh-pages --force
+          git push upstream `git subtree split --prefix=public --ignore-joins`:gh-pages --force
