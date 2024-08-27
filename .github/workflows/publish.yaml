@@ -1,6 +1,7 @@
 name: publish
 
 on:
+  pull_request:
   push:
     branches: [ main ]
 
@@ -18,13 +19,20 @@ jobs:
           git config --global user.name "masci"
           git remote add upstream https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
+      - name: Setup Hugo
+        uses: peaceiris/actions-hugo@v3
+        with:
+          hugo-version: '0.133.1'
+          extended: true
+
       - name: Build site
         run: |
           hugo mod get -u
           hugo build -t terminal
 
-      - name: Push gh-pages branch
-        run: |
-          git add -A
-          git commit -m"rebuilding site from ${{ github.sha }}"
-          git push upstream `git subtree split --prefix=public --ignore-joins`:gh-pages --force
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        if: github.ref == 'refs/heads/main'
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
