@@ -19,9 +19,9 @@ jobs:
           git remote add upstream https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
 
       - name: Build site
-        uses: jakejarvis/hugo-build-action@master
-        with:
-          args: -t terminal
+        run: |
+          hugo mod get -u
+          hugo build -t terminal
 
       - name: Push gh-pages branch
         run: |
