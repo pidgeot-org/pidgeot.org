@@ -28,7 +28,7 @@ jobs:
       - name: Build site
         run: |
           hugo mod get -u
-          hugo build -t terminal
+          hugo
 
       - name: Deploy
         uses: peaceiris/actions-gh-pages@v3
